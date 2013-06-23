@@ -1,4 +1,4 @@
-module FrontKick
+module Frontkick
   class CommandResult
     attr_accessor :stdout, :stderr, :duration
 
