@@ -1,3 +1,9 @@
+# 0.0.3 (2013/06/23)
+
+Changes:
+
+- attr_accessor :exit_code
+
 # 0.0.2 (2013/06/23)
 
 Features:
