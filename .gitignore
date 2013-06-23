@@ -10,3 +10,4 @@ vendor
 doc/*
 tmp/*
 .yardoc
+pkg

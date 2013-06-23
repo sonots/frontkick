@@ -10,6 +10,23 @@ frontkick is a wrapper of Open3#popen3 to execute a command easily
 
     gem install frontkick
 
+### Basic Usage
+
+    result = Frontkick::Command.exec("echo *")
+    puts result.successful? #=> true if exit_code is 0
+    puts result.stdout #=> stdout output of the command
+    puts result.stderr #=> stderr output of the command
+    puts result.exit_code #=> exit_code of the command
+    puts result.duration #=> the time used to execute the command
+
+### Escape Command
+
+    result = Frontkick::Command.exec(["echo", "*"]) #=> echo the asterisk character
+
+### Timeout Option
+
+    Frontkick::Command.exec("sleep 2 && ls /hoge", :timeout => 1)
+
 ## Contributing
 
 1. Fork it

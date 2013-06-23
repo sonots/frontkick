@@ -1,6 +1,6 @@
 module Frontkick
   class CommandResult
-    attr_accessor :stdout, :stderr, :duration
+    attr_accessor :stdout, :stderr, :exit_code, :duration
 
     def initialize(stdout, stderr, exit_code, duration)
       @stdout = stdout
