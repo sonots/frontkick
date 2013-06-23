@@ -12,6 +12,7 @@ module Frontkick
         timeout(opts[:timeout]) do # nil is for no timeout
           duration = Benchmark.realtime do
             stdin, out, err, wait_thr = Open3.popen3(*cmd_array)
+            stdin.close
             pid = wait_thr.pid
             stdout = out.read
             stderr = err.read
@@ -27,10 +28,10 @@ module Frontkick
         stdout = ""
         stderr = "pid:#{pid}\tcommand:#{cmd_array.join(' ')} is timeout!"
       ensure
-        stdin.close unless stdin.nil?
-        out.close unless out.nil?
-        err.close unless err.nil?
-        wait_thr.kill unless wait_thr.stop?
+        stdin.close if stdin and !stdin.closed?
+        out.close if out and !out.closed?
+        err.close if err and !err.closed?
+        wait_thr.kill if wait_thr and !wait_thr.stop?
       end
       
       CommandResult.new(stdout, stderr, exit_code, duration)
