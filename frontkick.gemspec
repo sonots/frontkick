@@ -1,9 +1,11 @@
 #! /usr/bin/env gem build
 # encoding: utf-8
+$LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
+require 'frontkick/version'
 
 Gem::Specification.new do |gem|
   gem.name          = 'frontkick'
-  gem.version       = File.read(File.expand_path('VERSION', File.dirname(__FILE__))).chomp
+  gem.version       = Frontkick::VERSION
   gem.authors       = ["Naotoshi Seo"]
   gem.email         = ["sonots@gmail.com"]
   gem.homepage      = "https://github.com/sonots/frontkick"
