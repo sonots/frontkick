@@ -2,9 +2,7 @@
 
 testing ruby: 1.9.2, 1.9.3, 2.0.0;
 
-## About OnePuch
-
-frontkick is a wrapper of Open3#popen3 to execute a command easily
+frontkick is a wrapper of Open3#popen3 to execute a command easily.
 
 ## USAGE
 
