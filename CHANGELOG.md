@@ -1,4 +1,10 @@
-# 0.0.3 (2013/06/23)
+# 0.2.0 (2013/09/13)
+
+Changes:
+
+- Support exclusive option
+
+# 0.1.0 (2013/06/23)
 
 Changes:
 
