@@ -2,12 +2,18 @@ require 'benchmark'
 require 'open3'
 
 module Frontkick
+  class Locked < StandardError
+  end
+end
+
+module Frontkick
   class Command
     def self.exec(cmd, opts = {})
       stdout, stderr, exit_code, duration = nil
       stdin, out, err, wait_thr, pid = nil
 
       cmd_array = cmd.kind_of?(Array) ? cmd : [cmd]
+      lock_fd = file_lock(opts[:exclusive]) if opts[:exclusive]
       begin
         timeout(opts[:timeout]) do # nil is for no timeout
           duration = Benchmark.realtime do
@@ -32,6 +38,7 @@ module Frontkick
         out.close if out and !out.closed?
         err.close if err and !err.closed?
         wait_thr.kill if wait_thr and !wait_thr.stop?
+        lock_fd.flock(File::LOCK_UN)
       end
       
       CommandResult.new(stdout, stderr, exit_code, duration)
@@ -43,6 +50,21 @@ module Frontkick
       rescue Errno::ECHILD => e
         # no child process
       end
+    end
+
+    # Use file lock to perfome exclusive operation
+    #
+    # @param lock_file file path used to lock
+    # @return file descriptor
+    # @raise Fontkick::Locked if locked
+    def self.file_lock(lock_file)
+      lock_fd = File.open(lock_file, File::RDWR|File::CREAT, 0644)
+      success = lock_fd.flock(File::LOCK_EX|File::LOCK_NB)
+      unless success
+        lock_fd.flock(File::LOCK_UN)
+        raise Frontkick::Locked
+      end
+      lock_fd
     end
   end
 end
