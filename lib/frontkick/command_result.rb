@@ -2,11 +2,11 @@ module Frontkick
   class CommandResult
     attr_accessor :stdout, :stderr, :exit_code, :duration
 
-    def initialize(stdout, stderr, exit_code, duration)
-      @stdout = stdout
-      @stderr = stderr
-      @exit_code = exit_code
-      @duration = duration
+    def initialize(params)
+      @stdout = params[:stdout] || ""
+      @stderr = params[:stderr] || ""
+      @exit_code = params[:exit_code] || 0
+      @duration = params[:duration] || 0
     end
 
     def output

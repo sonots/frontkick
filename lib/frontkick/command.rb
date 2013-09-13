@@ -38,10 +38,10 @@ module Frontkick
         out.close if out and !out.closed?
         err.close if err and !err.closed?
         wait_thr.kill if wait_thr and !wait_thr.stop?
-        lock_fd.flock(File::LOCK_UN)
+        lock_fd.flock(File::LOCK_UN) if lock_fd
       end
       
-      CommandResult.new(stdout, stderr, exit_code, duration)
+      CommandResult.new(:stdout => stdout, :stderr => stderr, :exit_code => exit_code, :duration => duration)
     end
 
     def self.process_wait(pid)
