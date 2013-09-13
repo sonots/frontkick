@@ -1,3 +1,9 @@
+# 0.2.1 (2013/09/13)
+
+Changes:
+
+- Change the internal interface of Frontkick::CommandResult
+
 # 0.2.0 (2013/09/13)
 
 Changes:
