@@ -2,7 +2,7 @@
 
 testing ruby: 1.9.2, 1.9.3, 2.0.0;
 
-frontkick is a wrapper of Open3#popen3 to execute a command easily.
+Frontkick is a gem to execute a command simply. This is a wrapper of Open3#popen3. 
 
 ## USAGE
 
