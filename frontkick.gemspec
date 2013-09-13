@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Naotoshi Seo"]
   gem.email         = ["sonots@gmail.com"]
   gem.homepage      = "https://github.com/sonots/frontkick"
-  gem.summary       = "A wrapper of Open3#popen3 to execute a command easily"
+  gem.summary       = "Execute a command simply!"
   gem.description   = gem.summary
 
   gem.files         = `git ls-files`.split($\)
