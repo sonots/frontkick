@@ -2,7 +2,7 @@
 
 testing ruby: 1.9.2, 1.9.3, 2.0.0;
 
-Frontkick is a gem to execute a command simply. This is a wrapper of Open3#popen3. 
+Frontkick is a gem to execute a command and obtain status code, stdout, stderr simply, wheres, `system` does not provide it. 
 
 ## USAGE
 
