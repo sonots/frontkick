@@ -25,6 +25,12 @@ Frontkick is a gem to execute a command and obtain status code, stdout, stderr s
 
     Frontkick::Command.exec("sleep 2 && ls /hoge", :timeout => 1)
 
+### Exclusive Option
+
+Prohibit another process to run a command concurrently
+
+    Frontkick::Command.exec("sleep 2 && ls /hoge", :exclusive => "/tmp/frontkick.lock") # raises Fontkick::Locked if locked
+
 ## Contributing
 
 1. Fork it
