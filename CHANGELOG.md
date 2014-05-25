@@ -1,3 +1,10 @@
+# 0.3.0 (2014/05/25)
+
+Enhancements:
+
+- Alias `exit_code` to `status`
+- Alias `Frontkick::Command.exec` to `Frontkick.exec`
+
 # 0.2.1 (2013/09/13)
 
 Changes:
