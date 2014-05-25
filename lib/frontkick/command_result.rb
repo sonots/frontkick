@@ -1,6 +1,8 @@
 module Frontkick
   class CommandResult
     attr_accessor :stdout, :stderr, :exit_code, :duration
+    alias :status :exit_code
+    alias :status= :exit_code=
 
     def initialize(params)
       @stdout = params[:stdout] || ""

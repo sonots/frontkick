@@ -2,11 +2,6 @@ require 'benchmark'
 require 'open3'
 
 module Frontkick
-  class Locked < StandardError
-  end
-end
-
-module Frontkick
   class Command
     def self.exec(cmd, opts = {})
       stdout, stderr, exit_code, duration = nil

@@ -10,26 +10,27 @@ Frontkick is a gem to execute a command and obtain exit\_code, stdout, stderr si
 
 ### Basic Usage
 
-    result = Frontkick::Command.exec("echo *")
+    result = Frontkick.exec("echo *")
     puts result.successful? #=> true if exit_code is 0
     puts result.stdout #=> stdout output of the command
     puts result.stderr #=> stderr output of the command
     puts result.exit_code #=> exit_code of the command
     puts result.duration #=> the time used to execute the command
+    puts result.status #=> alias to exit_code
 
 ### Escape Command
 
-    result = Frontkick::Command.exec(["echo", "*"]) #=> echo the asterisk character
+    result = Frontkick.exec(["echo", "*"]) #=> echo the asterisk character
 
 ### Timeout Option
 
-    Frontkick::Command.exec("sleep 2 && ls /hoge", :timeout => 1)
+    Frontkick.exec("sleep 2 && ls /hoge", :timeout => 1)
 
 ### Exclusive Option
 
 Prohibit another process to run a command concurrently
 
-    Frontkick::Command.exec("sleep 2 && ls /hoge", :exclusive => "/tmp/frontkick.lock") # raises Fontkick::Locked if locked
+    Frontkick.exec("sleep 2 && ls /hoge", :exclusive => "/tmp/frontkick.lock") # raises Fontkick::Locked if locked
 
 ## Contributing
 
