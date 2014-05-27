@@ -2,7 +2,14 @@
 
 testing ruby: 1.9.2, 1.9.3, 2.0.0;
 
-Frontkick is a gem to execute a command and obtain exit\_code, stdout, stderr simply, wheres, `system` does not provide all of them.
+Frontkick is a gem to execute a command and obtain exit\_code, stdout, stderr simply. 
+
+## What is This For?
+
+Ruby's `Kernel.#system` method does not return STDOUT and STDERR. 
+Ruby's back quote (``) returns STDOUT, but does not return STDERR.
+
+With frontkick, you can easily get the exit code, STDOUT, and STDERR. 
 
 ## USAGE
 
