@@ -1,3 +1,9 @@
+# 0.3.2 (2014/05/27)
+
+Fixes:
+
+- Fix to require 'frontkick/error'
+
 # 0.3.1 (2014/05/25)
 
 Enhancements:
