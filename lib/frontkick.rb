@@ -1,4 +1,6 @@
 require 'rubygems'
+require 'frontkick/version'
+require 'frontkick/error'
 require 'frontkick/command'
 require 'frontkick/command_result'
 
