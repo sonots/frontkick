@@ -1,3 +1,10 @@
+# 0.3.3 (2014/06/04)
+
+Changes:
+
+- Rename `Frontkick::CommandResult` to `Frontkick::Result`
+- Keep `Frontkick::CommandResult` for lower version compatibility
+
 # 0.3.2 (2014/05/27)
 
 Fixes:
