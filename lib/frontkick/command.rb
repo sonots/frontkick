@@ -36,7 +36,7 @@ module Frontkick
         lock_fd.flock(File::LOCK_UN) if lock_fd
       end
       
-      CommandResult.new(:stdout => stdout, :stderr => stderr, :exit_code => exit_code, :duration => duration)
+      Result.new(:stdout => stdout, :stderr => stderr, :exit_code => exit_code, :duration => duration)
     end
 
     def self.process_wait(pid)

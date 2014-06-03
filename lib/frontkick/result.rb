@@ -1,5 +1,5 @@
 module Frontkick
-  class CommandResult
+  class Result
     attr_accessor :stdout, :stderr, :exit_code, :duration
     alias :status :exit_code
     alias :status= :exit_code=
@@ -23,4 +23,5 @@ module Frontkick
       @exit_code == 0
     end
   end
+  CommandResult = Result # for lower version compatibility
 end

@@ -2,7 +2,7 @@ require 'rubygems'
 require 'frontkick/version'
 require 'frontkick/error'
 require 'frontkick/command'
-require 'frontkick/command_result'
+require 'frontkick/result'
 
 module Frontkick
   def self.exec(cmd, opts = {})
