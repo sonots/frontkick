@@ -1,3 +1,9 @@
+# 0.3.4 (2014/07/30)
+
+Enhancements:
+
+- Add `exclusive_blocking` option
+
 # 0.3.3 (2014/06/04)
 
 Changes:
