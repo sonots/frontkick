@@ -8,7 +8,7 @@ module Frontkick
       stdin, out, err, wait_thr, pid = nil
 
       cmd_array = cmd.kind_of?(Array) ? cmd : [cmd]
-      lock_fd = file_lock(opts[:exclusive]) if opts[:exclusive]
+      lock_fd = file_lock(opts[:exclusive], opts[:exclusive_blocking]) if opts[:exclusive]
       begin
         timeout(opts[:timeout]) do # nil is for no timeout
           duration = Benchmark.realtime do
@@ -50,14 +50,19 @@ module Frontkick
     # Use file lock to perfome exclusive operation
     #
     # @param lock_file file path used to lock
+    # @param blocking blocking or non-blocking. default is nil (false)
     # @return file descriptor
     # @raise Fontkick::Locked if locked
-    def self.file_lock(lock_file)
+    def self.file_lock(lock_file, blocking = nil)
       lock_fd = File.open(lock_file, File::RDWR|File::CREAT, 0644)
-      success = lock_fd.flock(File::LOCK_EX|File::LOCK_NB)
-      unless success
-        lock_fd.flock(File::LOCK_UN)
-        raise Frontkick::Locked
+      if blocking
+        lock_fd.flock(File::LOCK_EX)
+      else
+        success = lock_fd.flock(File::LOCK_EX|File::LOCK_NB)
+        unless success
+          lock_fd.flock(File::LOCK_UN)
+          raise Frontkick::Locked
+        end
       end
       lock_fd
     end

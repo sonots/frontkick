@@ -39,6 +39,10 @@ Prohibit another process to run a command concurrently
 
     Frontkick.exec("sleep 2 && ls /hoge", :exclusive => "/tmp/frontkick.lock") # raises Fontkick::Locked if locked
 
+If you prefer to be blocked:
+
+    Frontkick.exec("sleep 2 && ls /hoge", :exclusive => "/tmp/frontkick.lock", :exclusive_blocking => true)
+
 ## Contributing
 
 1. Fork it
