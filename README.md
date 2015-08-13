@@ -19,11 +19,13 @@ With frontkick, you can easily get the exit code, STDOUT, and STDERR.
 
     result = Frontkick.exec("echo *")
     puts result.successful? #=> true if exit_code is 0
-    puts result.stdout #=> stdout output of the command
-    puts result.stderr #=> stderr output of the command
-    puts result.exit_code #=> exit_code of the command
-    puts result.duration #=> the time used to execute the command
-    puts result.status #=> alias to exit_code
+    puts result.success?    #=> alias to successful?
+    puts result.stdout      #=> stdout output of the command
+    puts result.stderr      #=> stderr output of the command
+    puts result.exit_code   #=> exit_code of the command
+    puts result.status      #=> alias to exit_code
+    puts result.exitstatus  #=> alias to exit_code
+    puts result.duration    #=> the time used to execute the command
 
 ### Escape Command
 

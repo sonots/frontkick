@@ -1,3 +1,11 @@
+# 0.3.5 (2015/08/13)
+
+Enhancements:
+
+- Enhance compatibility with Open3 Result::Status
+  - alias :success? to :successful?
+  - alias :exitstatus to :exit_code
+
 # 0.3.4 (2014/07/30)
 
 Enhancements:
