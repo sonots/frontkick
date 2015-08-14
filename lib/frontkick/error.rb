@@ -1,4 +1,5 @@
 require 'json'
+require 'timeout'
 
 module Frontkick
   # ref. http://docs.ruby-lang.org/ja/1.9.3/class/Timeout=3a=3aError.html
