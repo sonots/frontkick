@@ -4,13 +4,16 @@ require 'open3'
 module Frontkick
   class Command
     def self.exec(cmd, opts = {})
+      opts[:timeout_kill] = true unless opts.has_key?(:timeout_kill) # default: true
+
       stdout, stderr, exit_code, duration = nil
       stdin, out, err, wait_thr, pid = nil
 
       cmd_array = cmd.kind_of?(Array) ? cmd : [cmd]
+      command = cmd_array.join(' ')
       lock_fd = file_lock(opts[:exclusive], opts[:exclusive_blocking]) if opts[:exclusive]
       begin
-        timeout(opts[:timeout]) do # nil is for no timeout
+        timeout(opts[:timeout], Frontkick::TimeoutLocal) do # nil is for no timeout
           duration = Benchmark.realtime do
             stdin, out, err, wait_thr = Open3.popen3(*cmd_array)
             stdin.close
@@ -21,13 +24,13 @@ module Frontkick
             process_wait(pid)
           end
         end
-      rescue Timeout::Error => e
-        Process.kill('SIGINT', pid)
-        exit_code = wait_thr.value.exitstatus
-        process_wait(pid)
-        duration = opts[:timeout]
-        stdout = ""
-        stderr = "pid:#{pid}\tcommand:#{cmd_array.join(' ')} is timeout!"
+      rescue Frontkick::TimeoutLocal => e
+        if opts[:timeout_kill]
+          Process.kill('SIGINT', pid)
+          exit_code = wait_thr.value.exitstatus
+          process_wait(pid)
+        end
+        raise Frontkick::Timeout.new(pid, command, opts[:timeout_kill])
       ensure
         stdin.close if stdin and !stdin.closed?
         out.close if out and !out.closed?

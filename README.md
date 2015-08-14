@@ -33,7 +33,11 @@ With frontkick, you can easily get the exit code, STDOUT, and STDERR.
 
 ### Timeout Option
 
-    Frontkick.exec("sleep 2 && ls /hoge", :timeout => 1)
+    Frontkick.exec("sleep 2 && ls /hoge", :timeout => 1) # raises Frontkick::Timeout
+
+not to kill timeouted process
+
+    Frontkick.exec("sleep 2 && ls /hoge", :timeout => 1, :timeout_kill => false) # raises Frontkick::Timeout
 
 ### Exclusive Option
 
