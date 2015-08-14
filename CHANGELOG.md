@@ -1,3 +1,13 @@
+# 0.4.0 (2015/08/15)
+
+Changes:
+
+- :timeout option now raises Frontkick::Timeout
+
+Enhancements:
+
+- Add :timeout_kill => false option not to kill timeouted process
+
 # 0.3.5 (2015/08/13)
 
 Enhancements:
