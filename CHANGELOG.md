@@ -1,4 +1,4 @@
-# 0.4.0 (2015/08/15)
+# 0.4.1 (2015/08/15)
 
 Changes:
 
@@ -7,6 +7,10 @@ Changes:
 Enhancements:
 
 - Add :timeout_kill => false option not to kill timeouted process
+
+# 0.4.0 (2015/08/15)
+
+yanked
 
 # 0.3.5 (2015/08/13)
 
