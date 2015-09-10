@@ -1,3 +1,9 @@
+# 0.4.2 (2015/09/11)
+
+Enhancements:
+
+- Add :dry_run option
+
 # 0.4.1 (2015/08/15)
 
 Changes:
