@@ -31,6 +31,11 @@ With frontkick, you can easily get the exit code, STDOUT, and STDERR.
 
     result = Frontkick.exec(["echo", "*"]) #=> echo the asterisk character
 
+### Dry Run Option
+
+    result = Frontkick.exec(["echo", "*"], :dry_run => 1)
+    puts result.stdout #=> echo \*
+
 ### Timeout Option
 
     Frontkick.exec("sleep 2 && ls /hoge", :timeout => 1) # raises Frontkick::Timeout

@@ -1,5 +1,6 @@
 require 'benchmark'
 require 'open3'
+require 'shellwords'
 
 module Frontkick
   class Command
@@ -10,7 +11,12 @@ module Frontkick
       stdin, out, err, wait_thr, pid = nil
 
       cmd_array = cmd.kind_of?(Array) ? cmd : [cmd]
-      command = cmd_array.join(' ')
+      command = Shellwords.shelljoin(cmd_array)
+
+      if opts[:dry_run]
+        return Result.new(:stdout => command, :stderr => '', :exit_code => 0, :duration => 0)
+      end
+
       lock_fd = file_lock(opts[:exclusive], opts[:exclusive_blocking]) if opts[:exclusive]
       begin
         timeout(opts[:timeout], Frontkick::TimeoutLocal) do # nil is for no timeout
