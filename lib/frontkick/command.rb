@@ -11,7 +11,7 @@ module Frontkick
       stdin, out, err, wait_thr, pid = nil
 
       cmd_array = cmd.kind_of?(Array) ? cmd : [cmd]
-      command = "#{cmd_array.first} #{Shellwords.shelljoin(cmd_array[1..-2])}"
+      command = "#{cmd_array.first} #{Shellwords.shelljoin(cmd_array[1..-1])}"
 
       if opts[:dry_run]
         return Result.new(:stdout => command, :stderr => '', :exit_code => 0, :duration => 0)
