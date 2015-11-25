@@ -17,8 +17,16 @@ module Frontkick
       @stdout
     end
 
+    def stdout?
+      !@stdout.empty?
+    end
+
     def errors
       @stderr
+    end
+
+    def stderr?
+      !@stderr.empty?
     end
 
     def successful?

@@ -21,7 +21,9 @@ With frontkick, you can easily get the exit code, STDOUT, and STDERR.
     puts result.successful? #=> true if exit_code is 0
     puts result.success?    #=> alias to successful?
     puts result.stdout      #=> stdout output of the command
+    puts result.stdout?     #=> true if the command outputs stdout
     puts result.stderr      #=> stderr output of the command
+    puts result.stderr?     #=> true if the command outputs stderr
     puts result.exit_code   #=> exit_code of the command
     puts result.status      #=> alias to exit_code
     puts result.exitstatus  #=> alias to exit_code
