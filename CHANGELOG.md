@@ -1,3 +1,9 @@
+# 0.4.4 (2015/11/25)
+
+Fixes:
+
+- Fix not to discard the last argument in dry-run mode print (thanks @niku4i)
+
 # 0.4.3 (2015/09/11)
 
 Enhancements:
