@@ -1,3 +1,9 @@
+# 0.4.5 (2016/01/05)
+
+Fixes:
+
+- Avoid pipe deadlock
+
 # 0.4.4 (2015/11/25)
 
 Fixes:
