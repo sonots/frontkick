@@ -33,7 +33,7 @@ With frontkick, you can easily get the exit code, STDOUT, and STDERR.
 
 ### Dry Run Option
 
-    result = Frontkick.exec(["echo", "*"], :dry_run => 1)
+    result = Frontkick.exec(["echo", "*"], :dry_run => true)
     puts result.stdout #=> echo \*
 
 ### Timeout Option
@@ -53,6 +53,13 @@ Prohibit another process to run a command concurrently
 If you prefer to be blocked:
 
     Frontkick.exec("sleep 2 && ls /hoge", :exclusive => "/tmp/frontkick.lock", :exclusive_blocking => true)
+
+### Hint: Redirect stderr to stdout
+
+Frontkick itself does not aid anything, but you can do as
+
+    result = Frontkick.exec(["ls /something_not_found 2>&1"])
+    puts result.stdout #=> ls: /something_not_found: No such file or directory
 
 ## Contributing
 
