@@ -19,7 +19,7 @@ module Frontkick
 
       lock_fd = file_lock(opts[:exclusive], opts[:exclusive_blocking]) if opts[:exclusive]
       begin
-        timeout(opts[:timeout], Frontkick::TimeoutLocal) do # nil is for no timeout
+        ::Timeout.timeout(opts[:timeout], Frontkick::TimeoutLocal) do # nil is for no timeout
           duration = Benchmark.realtime do
             stdin, out, err, wait_thr = Open3.popen3(*cmd_array)
             out_reader = Thread.new { out.read }
