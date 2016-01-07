@@ -1,3 +1,9 @@
+# 0.4.6 (2016/01/07)
+
+Fixes:
+
+- Object#timeout is deprecated, use Timeout.timeout instead.
+
 # 0.4.5 (2016/01/05)
 
 Fixes:
