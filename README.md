@@ -54,20 +54,7 @@ If you prefer to be blocked:
 
     Frontkick.exec("sleep 2 && ls /hoge", :exclusive => "/tmp/frontkick.lock", :exclusive_blocking => true)
 
-### Kill Child Option
-
-On receiving INT and TERM signal, kill the kicked child process before exiting
-
-    Frontkick.exec(["sleep 100"], :kill_child => true)
-
-NOTE: This uses Kernel.trap inside.
-NOTE: Shoud use `[]` form, otherwirse `sh -c 'sleep 100'` is ran, and frotkick kills sh process, but sleep process remains
-
-### Spawn Options
-
-Other options such as :chdir are treated as options of `Kernel.#spawn`. See http://ruby-doc.org/core-2.3.0/Kernel.html#method-i-spawn for available options.
-
-### Redirect Options
+### Redirect Options (:out and :err)
 
     Frontkick.exec(["ls /something_not_found"], :out => 'stdout.txt', :err => 'stderr.txt')
 
@@ -78,6 +65,39 @@ This redirects STDOUT and STDERR into files. In this case, result.stdout, and re
     Frontkick.exec(["ls /something_not_found"], :out => out, :err => err)
 
 You can also give IO objects. In this case, result.stdout, and result.stderr are the given IO objects.
+
+### Popen3 Options (such as :chdir)
+
+Other options such as :chdir are treated as options of `Open3.#popen3`.
+
+### Kill Child Process
+
+To kill your frontkick process with its kicked child process, send signal to their signal group as
+
+    kill -TERM -{PGID}
+
+You can find PGID like `ps -eo pid,pgid,command`.
+
+If you can not send a signal to a signal group by some reasons, handle signal by yourself as
+
+```ruby
+Frontkick.exec(["sleep 100"]) do |pid|
+  trap :INT do
+    Process.kill(:TERM, pid)
+    # wait child processes finish
+    begin
+      pid, status = Process.waitpid2(pid)
+    rescue Errno::ECHILD => e
+    end
+    exit 130
+  end
+  trap :TERM do
+    Process.kill(:TERM, pid)
+    Frontkick.process_wait(pid) # same with above
+    exit 143
+  end
+end
+```
 
 ## Contributing
 

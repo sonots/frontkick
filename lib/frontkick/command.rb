@@ -4,7 +4,7 @@ require 'shellwords'
 
 module Frontkick
   class Command
-    def self.exec(cmd, opts = {})
+    def self.exec(cmd, opts = {}, &block)
       opts[:timeout_kill] = true unless opts.has_key?(:timeout_kill) # default: true
 
       exit_code, duration = nil
@@ -39,13 +39,13 @@ module Frontkick
         return Result.new(:stdout => command, :stderr => '', :exit_code => 0, :duration => 0)
       end
 
-      spawn_opts = self.spawn_opts(opts)
+      popen3_opts = self.popen3_opts(opts)
 
       lock_fd = file_lock(opts[:exclusive], opts[:exclusive_blocking]) if opts[:exclusive]
       begin
         ::Timeout.timeout(opts[:timeout], Frontkick::TimeoutLocal) do # nil is for no timeout
           duration = Benchmark.realtime do
-            stdin, stdout, stderr, wait_thr = Open3.popen3(*cmd_array, spawn_opts)
+            stdin, stdout, stderr, wait_thr = Open3.popen3(*cmd_array, popen3_opts)
             out_thread = Thread.new {
               begin
                 while true
@@ -65,9 +65,7 @@ module Frontkick
             stdin.close
             pid = wait_thr.pid
 
-            if opts[:kill_child]
-              trap_signal(pid)
-            end
+            yield(pid) if block_given?
 
             out_thread.join
             err_thread.join
@@ -105,27 +103,15 @@ module Frontkick
 
     # private
 
-    def self.spawn_opts(opts)
+    def self.popen3_opts(opts)
       opts.dup.tap {|o|
         o.delete(:timeout_kill)
         o.delete(:exclusive)
         o.delete(:exclusive_blocking)
         o.delete(:timeout)
-        o.delete(:kill_child)
+        o.delete(:out)
+        o.delete(:err)
       }
-    end
-
-    def self.trap_signal(pid)
-      trap :INT do
-        Process.kill(:TERM, pid)
-        process_wait(pid)
-        exit 130
-      end
-      trap :TERM do
-        Process.kill(:TERM, pid)
-        process_wait(pid)
-        exit 143
-      end
     end
 
     def self.process_wait(pid)
