@@ -1,3 +1,9 @@
+# 0.4.8 (2016/01/22)
+
+Fixes:
+
+- Fix kill_child option
+
 # 0.4.7 (2016/01/22)
 
 Enhancements:
