@@ -54,6 +54,14 @@ If you prefer to be blocked:
 
     Frontkick.exec("sleep 2 && ls /hoge", :exclusive => "/tmp/frontkick.lock", :exclusive_blocking => true)
 
+### Kill Child Option
+
+On receiving INT and TERM signal, kill the kicked child process before exiting
+
+    Frontkick.exec("sleep 100", :kill_child => true)
+
+NOTE: This uses Kernel.trap inside.
+
 ### Hint: Redirect stderr to stdout
 
 Frontkick itself does not aid anything, but you can do as
