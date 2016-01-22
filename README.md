@@ -58,9 +58,10 @@ If you prefer to be blocked:
 
 On receiving INT and TERM signal, kill the kicked child process before exiting
 
-    Frontkick.exec("sleep 100", :kill_child => true)
+    Frontkick.exec(["sleep 100"], :kill_child => true)
 
 NOTE: This uses Kernel.trap inside.
+NOTE: Shoud use `[]` form, otherwirse `sh -c 'sleep 100'` is ran, and frotkick kills sh process, but sleep process remains
 
 ### Hint: Redirect stderr to stdout
 

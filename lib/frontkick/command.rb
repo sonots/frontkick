@@ -27,17 +27,14 @@ module Frontkick
             stdin.close
             pid = wait_thr.pid
 
-            trapped_signal = nil
             if opts[:kill_child]
-              trap_signal(pid) {|sig| trapped_signal = sig }
+              trap_signal(pid)
             end
 
             stdout = out_reader.value
             stderr = err_reader.value
             exit_code = wait_thr.value.exitstatus
             process_wait(pid)
-
-            exit_signal(trapped_signal) if trapped_signal
           end
         end
       rescue Frontkick::TimeoutLocal => e
@@ -60,23 +57,14 @@ module Frontkick
 
     def self.trap_signal(pid)
       trap :INT do
-        Process.kill(:INT, pid)
-        yield(:INT)
+        Process.kill(:TERM, pid)
+        process_wait(pid)
+        exit 130
       end
       trap :TERM do
         Process.kill(:TERM, pid)
-        yield(:TERM)
-      end
-    end
-
-    def self.exit_signal(signal)
-      case signal
-      when :INT
-        exit(130)
-      when :TERM
-        exit(143)
-      else
-        raise 'Non supported signal'
+        process_wait(pid)
+        exit 143
       end
     end
 
