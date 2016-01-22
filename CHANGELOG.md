@@ -1,3 +1,9 @@
+# 0.5.0 (2016/01/22)
+
+Enhancements:
+
+- Add :out and :err options to redirects STDOUT and STDERR
+
 # 0.4.9 (2016/01/22)
 
 Enhancements:
