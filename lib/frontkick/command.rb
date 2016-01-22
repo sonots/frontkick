@@ -17,11 +17,13 @@ module Frontkick
         return Result.new(:stdout => command, :stderr => '', :exit_code => 0, :duration => 0)
       end
 
+      spawn_opts = self.spawn_opts(opts)
+
       lock_fd = file_lock(opts[:exclusive], opts[:exclusive_blocking]) if opts[:exclusive]
       begin
         ::Timeout.timeout(opts[:timeout], Frontkick::TimeoutLocal) do # nil is for no timeout
           duration = Benchmark.realtime do
-            stdin, out, err, wait_thr = Open3.popen3(*cmd_array)
+            stdin, out, err, wait_thr = Open3.popen3(*cmd_array, spawn_opts)
             out_reader = Thread.new { out.read }
             err_reader = Thread.new { err.read }
             stdin.close
@@ -53,6 +55,18 @@ module Frontkick
       end
       
       Result.new(:stdout => stdout, :stderr => stderr, :exit_code => exit_code, :duration => duration)
+    end
+
+    # private
+
+    def self.spawn_opts(opts)
+      opts.dup.tap {|o|
+        o.delete(:timeout_kill)
+        o.delete(:exclusive)
+        o.delete(:exclusive_blocking)
+        o.delete(:timeout)
+        o.delete(:kill_child)
+      }
     end
 
     def self.trap_signal(pid)

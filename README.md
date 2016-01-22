@@ -63,6 +63,10 @@ On receiving INT and TERM signal, kill the kicked child process before exiting
 NOTE: This uses Kernel.trap inside.
 NOTE: Shoud use `[]` form, otherwirse `sh -c 'sleep 100'` is ran, and frotkick kills sh process, but sleep process remains
 
+### Spawn Options
+
+Other options such as :chdir are treated as options of `Kernel.#spawn`. See http://ruby-doc.org/core-2.3.0/Kernel.html#method-i-spawn for available options.
+
 ### Hint: Redirect stderr to stdout
 
 Frontkick itself does not aid anything, but you can do as
