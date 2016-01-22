@@ -1,3 +1,9 @@
+# 0.4.9 (2016/01/22)
+
+Enhancements:
+
+- Support spawn options
+
 # 0.4.8 (2016/01/22)
 
 Fixes:
