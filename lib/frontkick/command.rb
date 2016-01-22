@@ -7,8 +7,30 @@ module Frontkick
     def self.exec(cmd, opts = {})
       opts[:timeout_kill] = true unless opts.has_key?(:timeout_kill) # default: true
 
-      stdout, stderr, exit_code, duration = nil
-      stdin, out, err, wait_thr, pid = nil
+      exit_code, duration = nil
+      stdin, stdout, stderr, wait_thr, pid = nil
+
+      if opts[:out]
+        if opts[:out].is_a?(String)
+          out = File.open(opts[:out], 'w')
+          out.sync = true
+        else
+          out = opts[:out] # IO
+        end
+      else
+        out = StringIO.new
+      end
+
+      if opts[:err]
+        if opts[:err].is_a?(String)
+          err = File.open(opts[:err], 'w')
+          err.sync = true
+        else
+          err = opts[:err] # IO
+        end
+      else
+        err = StringIO.new
+      end
 
       cmd_array = cmd.kind_of?(Array) ? cmd : [cmd]
       command = "#{cmd_array.first} #{Shellwords.shelljoin(cmd_array[1..-1])}"
@@ -23,9 +45,23 @@ module Frontkick
       begin
         ::Timeout.timeout(opts[:timeout], Frontkick::TimeoutLocal) do # nil is for no timeout
           duration = Benchmark.realtime do
-            stdin, out, err, wait_thr = Open3.popen3(*cmd_array, spawn_opts)
-            out_reader = Thread.new { out.read }
-            err_reader = Thread.new { err.read }
+            stdin, stdout, stderr, wait_thr = Open3.popen3(*cmd_array, spawn_opts)
+            out_thread = Thread.new {
+              begin
+                while true
+                  out.write stdout.readpartial(4096)
+                end
+              rescue EOFError
+              end
+            }
+            err_thread = Thread.new {
+              begin
+                while true
+                  err.write stderr.readpartial(4096)
+                end
+              rescue EOFError
+              end
+            }
             stdin.close
             pid = wait_thr.pid
 
@@ -33,8 +69,8 @@ module Frontkick
               trap_signal(pid)
             end
 
-            stdout = out_reader.value
-            stderr = err_reader.value
+            out_thread.join
+            err_thread.join
             exit_code = wait_thr.value.exitstatus
             process_wait(pid)
           end
@@ -52,9 +88,19 @@ module Frontkick
         err.close if err and !err.closed?
         wait_thr.kill if wait_thr and !wait_thr.stop?
         lock_fd.flock(File::LOCK_UN) if lock_fd
+        if opts[:out] and opts[:out].is_a?(String)
+          out.close rescue nil
+        end
+        if opts[:err] and opts[:err].is_a?(String)
+          err.close rescue nil
+        end
       end
-      
-      Result.new(:stdout => stdout, :stderr => stderr, :exit_code => exit_code, :duration => duration)
+
+      Result.new(
+        :stdout => opts[:out] ? opts[:out] : out.string,
+        :stderr => opts[:err] ? opts[:err] : err.string,
+        :exit_code => exit_code, :duration => duration
+      )
     end
 
     # private

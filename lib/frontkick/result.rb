@@ -6,7 +6,7 @@ module Frontkick
     alias :exitstatus :exit_code # for compatibility with Open3 Process::Status
     alias :exitstatus= :exit_code= # for compatibility with Open3 Process::Status
 
-    def initialize(params)
+    def initialize(params = {})
       @stdout = params[:stdout] || ""
       @stderr = params[:stderr] || ""
       @exit_code = params[:exit_code] || 0

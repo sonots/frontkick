@@ -67,12 +67,17 @@ NOTE: Shoud use `[]` form, otherwirse `sh -c 'sleep 100'` is ran, and frotkick k
 
 Other options such as :chdir are treated as options of `Kernel.#spawn`. See http://ruby-doc.org/core-2.3.0/Kernel.html#method-i-spawn for available options.
 
-### Hint: Redirect stderr to stdout
+### Redirect Options
 
-Frontkick itself does not aid anything, but you can do as
+    Frontkick.exec(["ls /something_not_found"], :out => 'stdout.txt', :err => 'stderr.txt')
 
-    result = Frontkick.exec(["ls /something_not_found 2>&1"])
-    puts result.stdout #=> ls: /something_not_found: No such file or directory
+This redirects STDOUT and STDERR into files. In this case, result.stdout, and result.stderr are the given filename.
+
+    out = File.open('stdout.txt', 'w').tap {|fp| fp.sync = true }
+    err = File.open('stderr.txt', 'w').tap {|fp| fp.sync = true }
+    Frontkick.exec(["ls /something_not_found"], :out => out, :err => err)
+
+You can also give IO objects. In this case, result.stdout, and result.stderr are the given IO objects.
 
 ## Contributing
 
