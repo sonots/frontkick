@@ -81,7 +81,8 @@ You can find PGID like `ps -eo pid,pgid,command`.
 If you can not send a signal to a signal group by some reasons, handle signal by yourself as
 
 ```ruby
-Frontkick.exec(["sleep 100"]) do |pid|
+Frontkick.exec(["sleep 100"]) do |wait_thr|
+  pid = wait_thr.pid
   trap :INT do
     Process.kill(:TERM, pid)
     # wait child processes finish
@@ -98,6 +99,8 @@ Frontkick.exec(["sleep 100"]) do |pid|
   end
 end
 ```
+
+More sophisticated example is available at [./example/kill_child.rb]
 
 ## Contributing
 

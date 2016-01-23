@@ -46,7 +46,7 @@ module Frontkick
         ::Timeout.timeout(opts[:timeout], Frontkick::TimeoutLocal) do # nil is for no timeout
           duration = Benchmark.realtime do
             stdin, stdout, stderr, wait_thr = Open3.popen3(*cmd_array, popen3_opts)
-            out_thread = Thread.new {
+            out_thr = Thread.new {
               begin
                 while true
                   out.write stdout.readpartial(4096)
@@ -54,7 +54,7 @@ module Frontkick
               rescue EOFError
               end
             }
-            err_thread = Thread.new {
+            err_thr = Thread.new {
               begin
                 while true
                   err.write stderr.readpartial(4096)
@@ -65,10 +65,10 @@ module Frontkick
             stdin.close
             pid = wait_thr.pid
 
-            yield(pid) if block_given?
+            yield(wait_thr) if block_given?
 
-            out_thread.join
-            err_thread.join
+            out_thr.join
+            err_thr.join
             exit_code = wait_thr.value.exitstatus
             process_wait(pid)
           end
