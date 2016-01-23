@@ -72,35 +72,33 @@ Other options such as :chdir are treated as options of `Open3.#popen3`.
 
 ### Kill Child Process
 
-To kill your frontkick process with its kicked child process, send signal to their signal group as
+Sending a signal to a kicked child process is fine because a frontkick process can finish.
+But, sending a signal to a frontkick process is not fine because a child process would become an orphan process.
+
+To kill your frontkick process with its child process correctly, send a signal to their **process group** as
 
     kill -TERM -{PGID}
 
 You can find PGID like `ps -eo pid,pgid,command`.
 
-If you can not send a signal to a signal group by some reasons, handle signal by yourself as
+If you can not take such an approach by some reasons (for example, `daemontools`, a process management tool,
+does not support to send a signal to a process group), handle signal by yourself as
 
 ```ruby
 Frontkick.exec(["sleep 100"]) do |wait_thr|
   pid = wait_thr.pid
   trap :INT do
     Process.kill(:TERM, pid)
-    # wait child processes finish
-    begin
-      pid, status = Process.waitpid2(pid)
-    rescue Errno::ECHILD => e
-    end
     exit 130
   end
   trap :TERM do
     Process.kill(:TERM, pid)
-    Frontkick.process_wait(pid) # same with above
     exit 143
   end
 end
 ```
 
-More sophisticated example is available at [./example/kill_child.rb]
+More sophisticated example is available at [./example/kill_child.rb](./example/kill_child.rb)
 
 ## Contributing
 
