@@ -1,3 +1,9 @@
+# 0.5.1 (2016/01/23)
+
+Changes:
+
+- Drop :kill_child option, instead, support pid block
+
 # 0.5.0 (2016/01/22)
 
 Enhancements:
