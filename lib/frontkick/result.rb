@@ -9,7 +9,7 @@ module Frontkick
     def initialize(params = {})
       @stdout = params[:stdout] || ""
       @stderr = params[:stderr] || ""
-      @exit_code = params[:exit_code] || 0
+      @exit_code = params[:exit_code] # exit_code would be nil if child process is killed -9
       @duration = params[:duration] || 0
     end
 
