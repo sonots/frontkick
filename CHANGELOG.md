@@ -1,3 +1,9 @@
+# 0.5.2 (2016/03/18)
+
+Fixes:
+
+- Fix not to return exitstatus 0 when a child process is killed by -9 (Now, exitstatus becomes nil as Open3.popen3)
+
 # 0.5.1 (2016/01/23)
 
 Changes:
