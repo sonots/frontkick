@@ -42,10 +42,11 @@ When the first argument is a String, the command is executed via shell if the co
 otherwise, the command is not executed via shell.
 
 ```ruby
-result = Frontkick.exec("echo *") #=> shell wildcards
+result = Frontkick.exec("echo foo") # no shell
+result = Frontkick.exec("echo *") # with shell
 ```
 
-The process tree will be like:
+The process tree for the latter (with shell)  will be like:
 
 ```
 ruby
