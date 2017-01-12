@@ -5,8 +5,8 @@ require 'frontkick/command'
 require 'frontkick/result'
 
 module Frontkick
-  def self.exec(cmd, opts = {}, &block)
-    ::Frontkick::Command.exec(cmd, opts, &block)
+  def self.exec(*env_cmd, **opts, &block)
+    ::Frontkick::Command.exec(*env_cmd, opts, &block)
   end
 
   def self.process_wait(pid)
