@@ -82,8 +82,8 @@ module Frontkick
         raise Frontkick::Timeout.new(pid, command, opts[:timeout_kill])
       ensure
         stdin.close if stdin and !stdin.closed?
-        out.close if out and !out.closed?
-        err.close if err and !err.closed?
+        stdout.close if stdout and !stdout.closed?
+        stderr.close if stderr and !stderr.closed?
         wait_thr.kill if wait_thr and !wait_thr.stop?
         lock_fd.flock(File::LOCK_UN) if lock_fd
         if opts[:out] and opts[:out].is_a?(String)
