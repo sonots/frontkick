@@ -1,3 +1,9 @@
+# 0.5.3 (2017/01/12)
+
+Fixes:
+
+- Fix not to close given out and err IO objects
+
 # 0.5.2 (2016/03/18)
 
 Fixes:
