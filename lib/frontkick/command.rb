@@ -4,7 +4,18 @@ require 'shellwords'
 
 module Frontkick
   class Command
-    def self.exec(cmd, opts = {}, &block)
+    def self.exec(*env_cmd, **opts, &block)
+      env, cmd = env_cmd.size >= 2 ? env_cmd : [{}, env_cmd.first]
+      # With this conversion,
+      #
+      #   popen3(env, *cmd_array, opts)
+      #
+      # works for both interface of:
+      #
+      #   popen3(env, command, opts)
+      #   popen3(env, program, *args, opts)
+      cmd_array = cmd.is_a?(Array) ? cmd : [cmd]
+
       opts[:timeout_kill] = true unless opts.has_key?(:timeout_kill) # default: true
 
       exit_code, duration = nil
@@ -32,11 +43,10 @@ module Frontkick
         err = StringIO.new
       end
 
-      cmd_array = cmd.kind_of?(Array) ? cmd : [cmd]
-      command = "#{cmd_array.first} #{Shellwords.shelljoin(cmd_array[1..-1])}"
-
       if opts[:dry_run]
-        return Result.new(:stdout => command, :stderr => '', :exit_code => 0, :duration => 0)
+        stdout = env.map {|k,v| "#{k}=#{v} " }.join('')
+        stdout << "#{cmd_array.first} #{Shellwords.shelljoin(cmd_array[1..-1])}"
+        return Result.new(:stdout => stdout, :stderr => '', :exit_code => 0, :duration => 0)
       end
 
       popen3_opts = self.popen3_opts(opts)
@@ -45,7 +55,7 @@ module Frontkick
       begin
         ::Timeout.timeout(opts[:timeout], Frontkick::TimeoutLocal) do # nil is for no timeout
           duration = Benchmark.realtime do
-            stdin, stdout, stderr, wait_thr = Open3.popen3(*cmd_array, popen3_opts)
+            stdin, stdout, stderr, wait_thr = Open3.popen3(env, *cmd_array, popen3_opts)
             out_thr = Thread.new {
               begin
                 while true

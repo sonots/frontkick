@@ -70,6 +70,20 @@ ruby
 └─ echo
 ```
 
+NOTE: This interface is different with Kernel.spawn or Open3.popen3. They works with no shell if multiple arguments are given rather than an array as:
+
+```
+spawn('echo', '*')
+```
+
+### Environment Variables
+
+You can pass environment variables as a hash for the 1st argument as [spawn](https://ruby-doc.org/core-2.4.0/Kernel.html#method-i-spawn).
+
+```ruby
+result = Frontkick.exec({"FOO"=>"BAR"}, ["echo", "*"])
+```
+
 ### Dry Run Option
 
 ```ruby
