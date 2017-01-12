@@ -1,3 +1,9 @@
+# 0.5.4 (2017/01/12)
+
+Enhancements:
+
+- Support env argument
+
 # 0.5.3 (2017/01/12)
 
 Fixes:
