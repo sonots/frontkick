@@ -1,3 +1,9 @@
+# 0.5.5 (2017/03/20)
+
+Enhancements:
+
+- Add :popen2e option
+
 # 0.5.4 (2017/01/12)
 
 Enhancements:
