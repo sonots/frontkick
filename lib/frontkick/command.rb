@@ -55,32 +55,52 @@ module Frontkick
       begin
         ::Timeout.timeout(opts[:timeout], Frontkick::TimeoutLocal) do # nil is for no timeout
           duration = Benchmark.realtime do
-            stdin, stdout, stderr, wait_thr = Open3.popen3(env, *cmd_array, popen3_opts)
-            out_thr = Thread.new {
-              begin
-                while true
-                  out.write stdout.readpartial(4096)
+            if opts[:popen2e]
+              stdin, stdout, wait_thr = Open3.popen2e(env, *cmd_array, popen3_opts)
+              out_thr = Thread.new {
+                begin
+                  while true
+                    out.write stdout.readpartial(4096)
+                  end
+                rescue EOFError
                 end
-              rescue EOFError
-              end
-            }
-            err_thr = Thread.new {
-              begin
-                while true
-                  err.write stderr.readpartial(4096)
+              }
+              stdin.close
+              pid = wait_thr.pid
+
+              yield(wait_thr) if block_given?
+
+              out_thr.join
+              exit_code = wait_thr.value.exitstatus
+              process_wait(pid)
+            else
+              stdin, stdout, stderr, wait_thr = Open3.popen3(env, *cmd_array, popen3_opts)
+              out_thr = Thread.new {
+                begin
+                  while true
+                    out.write stdout.readpartial(4096)
+                  end
+                rescue EOFError
                 end
-              rescue EOFError
-              end
-            }
-            stdin.close
-            pid = wait_thr.pid
+              }
+              err_thr = Thread.new {
+                begin
+                  while true
+                    err.write stderr.readpartial(4096)
+                  end
+                rescue EOFError
+                end
+              }
+              stdin.close
+              pid = wait_thr.pid
 
-            yield(wait_thr) if block_given?
+              yield(wait_thr) if block_given?
 
-            out_thr.join
-            err_thr.join
-            exit_code = wait_thr.value.exitstatus
-            process_wait(pid)
+              out_thr.join
+              err_thr.join
+              exit_code = wait_thr.value.exitstatus
+              process_wait(pid)
+            end
           end
         end
       rescue Frontkick::TimeoutLocal => e
@@ -121,6 +141,7 @@ module Frontkick
         o.delete(:timeout)
         o.delete(:out)
         o.delete(:err)
+        o.delete(:popen2e)
       }
     end
 

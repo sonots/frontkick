@@ -139,6 +139,15 @@ Frontkick.exec(["ls /something_not_found"], :out => out, :err => err)
 
 You can also give IO objects. In this case, result.stdout, and result.stderr are the given IO objects.
 
+### Popen2e Option (Get stdout and stderr together)
+
+```ruby
+result = Frontkick.exec("echo foo; ls /something_not_found", :popen2e => true)
+puts result.output #=>
+foo
+ls: /something_not_found: No such file or directory
+```
+
 ### Popen3 Options (such as :chdir)
 
 Other options such as :chdir are treated as options of `Open3.#popen3`.
