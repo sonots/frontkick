@@ -1,3 +1,9 @@
+# 0.5.6 (2017/04/10)
+
+Fixes:
+
+- Fix `undefined local variable or method 'command'` occurs on timeout
+
 # 0.5.5 (2017/03/20)
 
 Enhancements:
