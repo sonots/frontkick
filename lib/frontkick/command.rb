@@ -44,9 +44,8 @@ module Frontkick
       end
 
       if opts[:dry_run]
-        stdout = env.map {|k,v| "#{k}=#{v} " }.join('')
-        stdout << "#{cmd_array.first} #{Shellwords.shelljoin(cmd_array[1..-1])}"
-        return Result.new(:stdout => stdout, :stderr => '', :exit_code => 0, :duration => 0)
+        command = build_command(env, cmd_array)
+        return Result.new(:stdout => command, :stderr => '', :exit_code => 0, :duration => 0)
       end
 
       popen3_opts = self.popen3_opts(opts)
@@ -109,7 +108,8 @@ module Frontkick
           exit_code = wait_thr.value.exitstatus
           process_wait(pid)
         end
-        raise Frontkick::Timeout.new(pid, Shellwords.shelljoin(cmd_array), opts[:timeout_kill])
+        command = build_command(env, cmd_array)
+        raise Frontkick::Timeout.new(pid, command, opts[:timeout_kill])
       ensure
         stdin.close if stdin and !stdin.closed?
         stdout.close if stdout and !stdout.closed?
@@ -132,6 +132,13 @@ module Frontkick
     end
 
     # private
+
+    def self.build_command(env, cmd_array)
+      command = env.map {|k,v| "#{k}=#{v} " }.join('')
+      command << cmd_array.first
+      command << " #{cmd_array[1..-1].shelljoin}" if cmd_array.size > 1
+      command
+    end
 
     def self.popen3_opts(opts)
       opts.dup.tap {|o|
