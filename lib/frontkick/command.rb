@@ -109,7 +109,7 @@ module Frontkick
           exit_code = wait_thr.value.exitstatus
           process_wait(pid)
         end
-        raise Frontkick::Timeout.new(pid, command, opts[:timeout_kill])
+        raise Frontkick::Timeout.new(pid, Shellwords.shelljoin(cmd_array), opts[:timeout_kill])
       ensure
         stdin.close if stdin and !stdin.closed?
         stdout.close if stdout and !stdout.closed?
