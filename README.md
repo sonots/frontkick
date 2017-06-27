@@ -70,16 +70,16 @@ ruby
 └─ echo
 ```
 
-NOTE: This interface is different with Kernel.spawn or Open3.popen3, but similar to IO.popen. Kernel.spawn or Open3.popen3 works with no shell if multiple arguments are given:
-
-```
-spawn('echo', '*')
-```
-
-IO.popen works with no shell if an array argument is given:
+NOTE: This **no shell** interface is similar to IO.popen which work as:
 
 ```
 IO.popen(['echo', '*'])
+```
+
+but different with Kernel.spawn, or Open3.popen3 which work as:
+
+```
+spawn('echo', '*')
 ```
 
 ### Environment Variables
