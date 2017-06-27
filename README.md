@@ -93,20 +93,20 @@ result = Frontkick.exec({"FOO"=>"BAR"}, ["echo", "*"])
 ### Dry Run Option
 
 ```ruby
-result = Frontkick.exec(["echo", "*"], :dry_run => true)
+result = Frontkick.exec(["echo", "*"], dry_run: true)
 puts result.stdout #=> echo \*
 ```
 
 ### Timeout Option
 
 ```ruby
-Frontkick.exec("sleep 2 && ls /hoge", :timeout => 1) # raises Frontkick::Timeout
+Frontkick.exec("sleep 2 && ls /hoge", timeout: 1) # raises Frontkick::Timeout
 ```
 
 not to kill timeouted process
 
 ```ruby
-Frontkick.exec("sleep 2 && ls /hoge", :timeout => 1, :timeout_kill => false) # raises Frontkick::Timeout
+Frontkick.exec("sleep 2 && ls /hoge", timeout: 1, timeout_kill: false) # raises Frontkick::Timeout
 ```
 
 ### Exclusive Option
@@ -114,19 +114,19 @@ Frontkick.exec("sleep 2 && ls /hoge", :timeout => 1, :timeout_kill => false) # r
 Prohibit another process to run a command concurrently
 
 ```ruby
-Frontkick.exec("sleep 2 && ls /hoge", :exclusive => "/tmp/frontkick.lock") # raises Fontkick::Locked if locked
+Frontkick.exec("sleep 2 && ls /hoge", exclusive: "/tmp/frontkick.lock") # raises Fontkick::Locked if locked
 ```
 
 If you prefer to be blocked:
 
 ```ruby
-Frontkick.exec("sleep 2 && ls /hoge", :exclusive => "/tmp/frontkick.lock", :exclusive_blocking => true)
+Frontkick.exec("sleep 2 && ls /hoge", exclusive: "/tmp/frontkick.lock", exclusive_blocking: true)
 ```
 
 ### Redirect Options (:out and :err)
 
 ```ruby
-Frontkick.exec(["ls /something_not_found"], :out => 'stdout.txt', :err => 'stderr.txt')
+Frontkick.exec(["ls /something_not_found"], out: 'stdout.txt', err: 'stderr.txt')
 ```
 
 This redirects STDOUT and STDERR into files. In this case, result.stdout, and result.stderr are the given filename.
@@ -134,7 +134,7 @@ This redirects STDOUT and STDERR into files. In this case, result.stdout, and re
 ```ruby
 out = File.open('stdout.txt', 'w').tap {|fp| fp.sync = true }
 err = File.open('stderr.txt', 'w').tap {|fp| fp.sync = true }
-Frontkick.exec(["ls /something_not_found"], :out => out, :err => err)
+Frontkick.exec(["ls /something_not_found"], out: out, err: err)
 ```
 
 You can also give IO objects. In this case, result.stdout, and result.stderr are the given IO objects.
@@ -142,15 +142,15 @@ You can also give IO objects. In this case, result.stdout, and result.stderr are
 ### Popen2e Option (Get stdout and stderr together)
 
 ```ruby
-result = Frontkick.exec("echo foo; ls /something_not_found", :popen2e => true)
+result = Frontkick.exec("echo foo; ls /something_not_found", popen2e: true)
 puts result.output #=>
 foo
 ls: /something_not_found: No such file or directory
 ```
 
-### Popen3 Options (such as :chdir)
+### Other Popen3 Options (such as :chdir)
 
-Other options such as :chdir are treated as options of `Open3.#popen3`.
+Other options such as :chdir are treated as options of `Open3.#popen3` (or `Open3.#popen2e` for the case of `popen2e: true`)
 
 ### Kill Child Process
 
