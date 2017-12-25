@@ -1,3 +1,9 @@
+# 0.5.7 (2017/12/25)
+
+Enhancements:
+
+- Add `timeout_kill_signal` option to set the signal to send on timeout (thanks to niku4i)
+
 # 0.5.6 (2017/04/10)
 
 Fixes:
