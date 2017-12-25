@@ -103,6 +103,13 @@ puts result.stdout #=> echo \*
 Frontkick.exec("sleep 2 && ls /hoge", timeout: 1) # raises Frontkick::Timeout
 ```
 
+The default signal that is sent to the command is `SIGINT`.
+You can change the signal as below.
+
+```ruby
+Frontkick.exec("sleep 2 && ls /hoge", timeout: 1, timeout_kill_signal: 'SIGTERM') # raises Frontkick::Timeout
+```
+
 not to kill timeouted process
 
 ```ruby

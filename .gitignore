@@ -11,3 +11,4 @@ doc/*
 tmp/*
 .yardoc
 pkg
+/.idea/

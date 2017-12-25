@@ -17,6 +17,7 @@ module Frontkick
       cmd_array = cmd.is_a?(Array) ? cmd : [cmd]
 
       opts[:timeout_kill] = true unless opts.has_key?(:timeout_kill) # default: true
+      opts[:timeout_kill_signal] = 'SIGINT' unless opts.has_key?(:timeout_kill_signal) # default: 'SIGINT'
 
       exit_code, duration = nil
       stdin, stdout, stderr, wait_thr, pid = nil
@@ -104,7 +105,7 @@ module Frontkick
         end
       rescue Frontkick::TimeoutLocal => e
         if opts[:timeout_kill]
-          Process.kill('SIGINT', pid)
+          Process.kill(opts[:timeout_kill_signal], pid)
           exit_code = wait_thr.value.exitstatus
           process_wait(pid)
         end
@@ -143,6 +144,7 @@ module Frontkick
     def self.popen3_opts(opts)
       opts.dup.tap {|o|
         o.delete(:timeout_kill)
+        o.delete(:timeout_kill_signal)
         o.delete(:exclusive)
         o.delete(:exclusive_blocking)
         o.delete(:timeout)
