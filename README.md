@@ -150,10 +150,12 @@ You can also give IO objects. In this case, result.stdout, and result.stderr are
 
 ```ruby
 result = Frontkick.exec("echo foo; ls /something_not_found", popen2e: true)
-puts result.output #=>
+puts result.stdout #=>
 foo
 ls: /something_not_found: No such file or directory
 ```
+
+Note that `stdout` contains contents of both `stdout` and `stderr` in this case.
 
 ### Other Popen3 Options (such as :chdir)
 
