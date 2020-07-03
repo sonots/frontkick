@@ -1,6 +1,7 @@
 require 'benchmark'
 require 'open3'
 require 'shellwords'
+require 'stringio'
 
 module Frontkick
   class Command
